@@ -1,206 +1,179 @@
 /* ===================================
-   مدونة تقنية عربية - JavaScript
+   كود بالعربي — main.js v2.0
    =================================== */
 
-// ══ ضع مفتاح Brevo الجديد هنا (بعد ما تجدده في لوحة Brevo) ══
+(function () {
+  'use strict';
 
-// ── إدارة الثيم ──────────────────────
-const ThemeManager = {
-  key: 'blog-theme',
+  /* ── Theme Toggle ──────────────────── */
+  const html         = document.documentElement;
+  const themeToggle  = document.getElementById('theme-toggle');
+  const mobileTheme  = document.getElementById('mobile-theme-toggle');
 
-  init() {
-    const saved      = localStorage.getItem(this.key);
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const theme      = saved || (prefersDark ? 'dark' : 'light');
-    this.apply(theme);
-    document.getElementById('theme-toggle')?.addEventListener('click', () => this.toggle());
-  },
-
-  apply(theme) {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem(this.key, theme);
-    const btn  = document.getElementById('theme-toggle');
-    if (!btn) return;
-    const icon = btn.querySelector('i');
-    if (icon) icon.className = theme === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-  },
-
-  toggle() {
-    const current = document.documentElement.getAttribute('data-theme');
-    this.apply(current === 'dark' ? 'light' : 'dark');
+  function getTheme() {
+    return localStorage.getItem('theme') || 'light';
   }
-};
+  function applyTheme(t) {
+    html.setAttribute('data-theme', t);
+    localStorage.setItem('theme', t);
+    const icon = t === 'dark' ? 'fa-sun' : 'fa-moon';
+    [themeToggle, mobileTheme].forEach(btn => {
+      if (btn) btn.querySelector('i').className = `fa-solid ${icon}`;
+    });
+  }
+  applyTheme(getTheme());
+  [themeToggle, mobileTheme].forEach(btn => {
+    if (btn) btn.addEventListener('click', () => {
+      applyTheme(getTheme() === 'dark' ? 'light' : 'dark');
+    });
+  });
 
-// ── نشرة Brevo الحقيقية ──────────────────────
-const NewsletterForm = {
-  init() {
-    const form = document.getElementById('newsletter-form');
-    if (!form) return;
+  /* ── Mobile Menu ───────────────────── */
+  const menuToggle = document.getElementById('menu-toggle');
+  const mobileNav  = document.getElementById('mobile-nav');
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const input = form.querySelector('input[type="email"]');
-      const btn   = form.querySelector('button[type="submit"]');
-      const msg   = form.querySelector('.nl-message');
-      const email = input.value.trim();
-      if (!email) return;
+  if (menuToggle && mobileNav) {
+    menuToggle.addEventListener('click', () => {
+      const open = mobileNav.classList.toggle('open');
+      menuToggle.classList.toggle('active', open);
+      menuToggle.setAttribute('aria-expanded', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    });
 
-      btn.disabled = true;
-      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جارٍ الاشتراك...';
+    // إغلاق عند الضغط على رابط
+    mobileNav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileNav.classList.remove('open');
+        menuToggle.classList.remove('active');
+        document.body.style.overflow = '';
+      });
+    });
 
-      try {
-        const res = await fetch('https://api.brevo.com/v3/contacts', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'api-key': BREVO_API_KEY
-          },
-          body: JSON.stringify({
-            email,
-            listIds: [BREVO_LIST_ID],
-            updateEnabled: true
-          })
-        });
-
-        if (res.ok || res.status === 204) {
-          btn.innerHTML = '<i class="fa-solid fa-check"></i> تم الاشتراك!';
-          btn.style.background = 'linear-gradient(135deg,#00C896,#00A080)';
-          input.value = '';
-          if (msg) { msg.textContent = 'أهلاً بك! ستصلك المقالات كل أسبوع.'; msg.style.color = 'var(--accent-2)'; }
-        } else if (res.status === 400) {
-          const data = await res.json();
-          if (data.code === 'duplicate_parameter') {
-            btn.innerHTML = '<i class="fa-solid fa-circle-info"></i> أنت مشترك بالفعل';
-            btn.style.background = 'linear-gradient(135deg,var(--accent-3),#e0a000)';
-          } else throw new Error(data.message);
-        } else throw new Error('فشل الاشتراك');
-
-      } catch (err) {
-        btn.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> خطأ، حاول مجدداً';
-        btn.style.background = 'linear-gradient(135deg,var(--accent-1),#c0392b)';
-        console.error('Brevo error:', err);
-      } finally {
-        setTimeout(() => {
-          btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> اشتراك';
-          btn.disabled  = false;
-          btn.style.background = '';
-        }, 4000);
+    // إغلاق عند الضغط خارج المنيو
+    document.addEventListener('click', e => {
+      if (mobileNav.classList.contains('open') &&
+          !mobileNav.contains(e.target) &&
+          !menuToggle.contains(e.target)) {
+        mobileNav.classList.remove('open');
+        menuToggle.classList.remove('active');
+        document.body.style.overflow = '';
       }
     });
   }
-};
 
-// ── كشف العناصر عند التمرير ──────────────────────
-const RevealObserver = {
-  init() {
-    const obs = new IntersectionObserver((entries) => {
+  /* ── Header Scroll Shadow ──────────── */
+  const header = document.querySelector('.site-header');
+  if (header) {
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 10);
+    }, { passive: true });
+  }
+
+  /* ── Reveal on Scroll ──────────────── */
+  const revealEls = document.querySelectorAll('.reveal');
+  if (revealEls.length) {
+    const observer = new IntersectionObserver(entries => {
       entries.forEach((entry, i) => {
         if (entry.isIntersecting) {
           setTimeout(() => entry.target.classList.add('visible'), i * 80);
-          obs.unobserve(entry.target);
+          observer.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => observer.observe(el));
   }
-};
 
-// ── عداد متحرك ──────────────────────
-const CounterAnimation = {
-  init() {
-    const counters = document.querySelectorAll('[data-count]');
-    if (!counters.length) return;
-    const obs = new IntersectionObserver((entries) => {
+  /* ── Counter Animation ─────────────── */
+  const counters = document.querySelectorAll('[data-count]');
+  if (counters.length) {
+    const countObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) { this.animate(entry.target); obs.unobserve(entry.target); }
+        if (!entry.isIntersecting) return;
+        const el     = entry.target;
+        const target = parseInt(el.dataset.count, 10);
+        const suffix = el.dataset.suffix || '';
+        const dur    = 1200;
+        const step   = dur / target || 1;
+        let current  = 0;
+        const timer  = setInterval(() => {
+          current++;
+          el.textContent = current + suffix;
+          if (current >= target) {
+            el.textContent = target + suffix;
+            clearInterval(timer);
+          }
+        }, step);
+        countObserver.unobserve(el);
       });
     }, { threshold: 0.5 });
-    counters.forEach(el => obs.observe(el));
-  },
-  animate(el) {
-    const target = parseInt(el.getAttribute('data-count'));
-    const suffix = el.getAttribute('data-suffix') || '';
-    const start  = performance.now();
-    const update = (time) => {
-      const p = Math.min((time - start) / 1500, 1);
-      el.textContent = Math.floor((1 - Math.pow(1 - p, 3)) * target) + suffix;
-      if (p < 1) requestAnimationFrame(update);
-    };
-    requestAnimationFrame(update);
+    counters.forEach(c => countObserver.observe(c));
   }
-};
 
-// ── تأثير الكتابة التدريجية ──────────────────────
-const TypeWriter = {
-  init() {
-    const el = document.getElementById('typewriter');
-    if (!el) return;
-    const texts = ['JavaScript', 'Python', 'CSS', 'HTML', 'Git', 'APIs'];
-    let ti = 0, ci = 0, del = false;
-    const type = () => {
-      const cur = texts[ti];
-      el.textContent = del ? cur.substring(0, ci - 1) : cur.substring(0, ci + 1);
-      del ? ci-- : ci++;
-      let speed = del ? 60 : 120;
-      if (!del && ci === cur.length) { speed = 2000; del = true; }
-      else if (del && ci === 0) { del = false; ti = (ti + 1) % texts.length; speed = 300; }
-      setTimeout(type, speed);
-    };
-    setTimeout(type, 1000);
+  /* ── Typewriter ────────────────────── */
+  const typeEl = document.getElementById('typewriter');
+  if (typeEl) {
+    const words = ['JavaScript', 'Python', 'CSS', 'HTML', 'React', 'Node.js'];
+    let wi = 0, ci = 0, deleting = false;
+
+    function type() {
+      const word = words[wi];
+      if (deleting) {
+        typeEl.textContent = word.slice(0, --ci);
+      } else {
+        typeEl.textContent = word.slice(0, ++ci);
+      }
+
+      let delay = deleting ? 60 : 110;
+      if (!deleting && ci === word.length) { delay = 1800; deleting = true; }
+      else if (deleting && ci === 0)       { deleting = false; wi = (wi + 1) % words.length; delay = 300; }
+      setTimeout(type, delay);
+    }
+    setTimeout(type, 800);
   }
-};
 
-// ── هيدر يختفي عند الإنزال ──────────────────────
-const StickyHeader = {
-  init() {
-    const header = document.querySelector('.site-header');
-    if (!header) return;
-    let lastY = 0;
-    header.style.transition = 'transform 0.3s ease, background 0.6s ease';
-    window.addEventListener('scroll', () => {
-      const y = window.scrollY;
-      header.style.transform = (y > lastY && y > 80) ? 'translateY(-100%)' : 'translateY(0)';
-      lastY = y;
-    }, { passive: true });
-  }
-};
-
-// ── إمالة البطاقات ──────────────────────
-const CardTilt = {
-  init() {
-    document.querySelectorAll('.article-card, .tool-card').forEach(card => {
-      card.addEventListener('mousemove', (e) => {
-        const r = card.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width  - 0.5;
-        const y = (e.clientY - r.top)  / r.height - 0.5;
-        card.style.transform = `perspective(1000px) rotateY(${x*4}deg) rotateX(${y*-4}deg) translateY(-6px)`;
-      });
-      card.addEventListener('mouseleave', () => card.style.transform = '');
+  /* ── Copy Code ─────────────────────── */
+  window.copyCode = function (btn) {
+    const block = btn.closest('.code-block');
+    if (!block) return;
+    const code = block.querySelector('pre code');
+    if (!code) return;
+    navigator.clipboard.writeText(code.innerText).then(() => {
+      btn.innerHTML = '<i class="fa-solid fa-check"></i> تم النسخ';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.innerHTML = '<i class="fa-regular fa-copy"></i> نسخ';
+        btn.classList.remove('copied');
+      }, 2000);
     });
-  }
-};
+  };
 
-// ── نسخ الكود (متاح عالمياً للمقالات) ──────────────────────
-window.copyCode = function(btn) {
-  const code = btn.closest('.code-block').querySelector('code').innerText;
-  navigator.clipboard.writeText(code).then(() => {
-    const icon = btn.querySelector('i');
-    if (icon) icon.className = 'fa-solid fa-check';
-    btn.classList.add('copied');
-    setTimeout(() => {
-      if (icon) icon.className = 'fa-regular fa-copy';
-      btn.classList.remove('copied');
-    }, 2000);
+  /* ── Newsletter Form ───────────────── */
+  document.querySelectorAll('.newsletter-form').forEach(form => {
+    const msg = form.querySelector('.nl-message');
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const btn = form.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> جاري...';
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          if (msg) { msg.style.color = 'var(--accent-2)'; msg.textContent = '✓ تم الاشتراك بنجاح! سنراسلك قريباً.'; }
+          form.reset();
+        } else {
+          if (msg) { msg.style.color = 'var(--accent-1)'; msg.textContent = '⚠ حدث خطأ، حاول مرة أخرى.'; }
+        }
+      } catch {
+        if (msg) { msg.style.color = 'var(--accent-1)'; msg.textContent = '⚠ تأكد من اتصالك بالإنترنت.'; }
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> اشتراك';
+      }
+    });
   });
-};
 
-// ── تشغيل كل شيء ──────────────────────
-document.addEventListener('DOMContentLoaded', () => {
-  ThemeManager.init();
-  RevealObserver.init();
-  CounterAnimation.init();
-  NewsletterForm.init();
-  TypeWriter.init();
-  StickyHeader.init();
-  setTimeout(() => CardTilt.init(), 500);
-});
+})();
