@@ -6,7 +6,6 @@
   <meta name="description" content="مدونة تقنية عربية تشرح البرمجة بأسلوب بسيط وعملي، مع أدوات مجانية للمطورين" />
   <title>كود بالعربي | مدونة برمجة تقنية</title>
   <link rel="stylesheet" href="css/style.css" />
-  <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23FF4D3D'/><text y='22' x='5' font-size='16' fill='white' font-family='monospace' font-weight='bold'>&lt;/&gt;</text></svg>" />
 </head>
@@ -48,11 +47,30 @@
             <a href="#newsletter" class="btn-subscribe">
               <i class="fa-solid fa-envelope"></i> اشترك مجاناً
             </a>
+            <button class="menu-toggle" id="menu-toggle" aria-label="القائمة" aria-expanded="false">
+              <span></span><span></span><span></span>
+            </button>
           </div>
 
         </div>
       </div>
     </header>
+
+    <!-- ══ موبايل ناف ══ -->
+    <nav class="mobile-nav" id="mobile-nav">
+      <a href="index.html"       class="nav-link active">الرئيسية</a>
+      <a href="blog/index.html"  class="nav-link">المقالات</a>
+      <a href="tools/index.html" class="nav-link">الأدوات</a>
+      <a href="#about"           class="nav-link">عن المدونة</a>
+      <div class="mobile-nav-footer">
+        <button class="btn-theme" id="mobile-theme-toggle" title="تغيير المظهر">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+        <a href="#newsletter" class="btn-subscribe">
+          <i class="fa-solid fa-envelope"></i> اشترك مجاناً
+        </a>
+      </div>
+    </nav>
 
     <!-- ══ هيرو ══ -->
     <section class="hero">
@@ -353,7 +371,7 @@
             <i class="fa-regular fa-copyright"></i>
             2025 كود بالعربي · صُنع بـ <i class="fa-solid fa-heart" style="color:var(--accent-1);"></i> للمجتمع التقني العربي
           </p>
-          <span class="footer-mono">v1.0.0 · vanilla JS</span>
+          <span class="footer-mono">v2.0.0 · vanilla JS</span>
         </div>
       </div>
     </footer>
