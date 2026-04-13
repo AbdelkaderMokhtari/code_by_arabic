@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Async/Await في JavaScript | كود بالعربي</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23FF4D3D'/><text y='22' x='5' font-size='16' fill='white' font-family='monospace' font-weight='bold'>&lt;/&gt;</text></svg>" />
+  <style>
+    .reading-progress { position:fixed; top:0; right:0; left:0; height:3px; background:rgba(0,0,0,0.08); z-index:200; }
+    .progress-bar { height:100%; background:linear-gradient(90deg,var(--accent-1),var(--accent-4),var(--accent-2)); width:0%; transition:width 0.1s linear; }
+
+    .article-layout { display:grid; grid-template-columns:1fr 270px; gap:48px; padding:44px 0 80px; align-items:start; }
+    @media(max-width:1024px){ .article-layout{grid-template-columns:1fr;} .article-sidebar{display:none;} }
+
+    .article-breadcrumb { display:flex; gap:8px; align-items:center; font-size:13px; color:var(--text-muted); margin-bottom:22px; flex-wrap:wrap; }
+    .article-breadcrumb a { color:var(--text-muted); text-decoration:none; display:flex; align-items:center; gap:5px; }
+    .article-breadcrumb a:hover { color:var(--accent-1); }
+    .article-breadcrumb i { font-size:10px; opacity:0.5; }
+
+    .article-tags { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; }
+    .article-title { font-size:clamp(24px,4vw,42px); font-weight:700; line-height:1.3; margin-bottom:20px; }
+
+    .article-meta { display:flex; align-items:center; gap:20px; padding:16px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); margin-bottom:32px; flex-wrap:wrap; }
+    .author { display:flex; align-items:center; gap:10px; }
+    .author-avatar { width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,var(--accent-1),var(--accent-4)); display:flex; align-items:center; justify-content:center; font-size:16px; color:#fff; flex-shrink:0; }
+    .author-name { font-size:14px; font-weight:600; }
+    .author-role { font-size:12px; color:var(--text-muted); }
+    .meta-items { display:flex; gap:16px; flex-wrap:wrap; margin-right:auto; }
+    .meta-item { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-muted); font-family:var(--font-mono); }
+    .meta-item i { font-size:11px; }
+
+    .article-body { font-size:17px; line-height:1.9; }
+    .article-body h2 { font-size:25px; font-weight:700; margin:44px 0 18px; padding-bottom:12px; border-bottom:2px solid var(--border); }
+    .article-body h2::before { content:'## '; font-family:var(--font-mono); font-size:15px; color:var(--accent-2); }
+    .article-body h3 { font-size:20px; font-weight:700; margin:34px 0 14px; }
+    .article-body p { margin-bottom:20px; }
+    .article-body a { color:var(--accent-4); text-decoration:underline; text-underline-offset:3px; }
+    .article-body ul,.article-body ol { padding-right:24px; margin-bottom:20px; }
+    .article-body li { margin-bottom:8px; }
+    .article-body code { font-family:var(--font-mono); font-size:14px; background:var(--bg-secondary); padding:2px 7px; border-radius:4px; }
+
+    .code-block { background:var(--bg-code); border-radius:var(--radius-md); overflow:hidden; margin:26px 0; border:1px solid rgba(255,255,255,0.05); box-shadow:var(--shadow-md); }
+    .code-block-header { background:rgba(255,255,255,0.04); padding:10px 16px; display:flex; align-items:center; gap:10px; }
+    .code-block-dots { display:flex; gap:5px; }
+    .code-block-dots span { width:9px; height:9px; border-radius:50%; }
+    .code-block-dots span:nth-child(1){background:#FF5F57;}
+    .code-block-dots span:nth-child(2){background:#FFBD2E;}
+    .code-block-dots span:nth-child(3){background:#28CA41;}
+    .code-block-lang { font-family:var(--font-mono); font-size:11px; color:#777; margin-right:auto; }
+    .code-copy-btn { display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1); color:#aaa; font-size:11px; font-family:var(--font-mono); padding:4px 10px; border-radius:4px; cursor:pointer; transition:all var(--transition); }
+    .code-copy-btn:hover { background:rgba(255,255,255,0.14); color:#fff; }
+    .code-copy-btn.copied { color:var(--accent-2); border-color:var(--accent-2); }
+    .code-block pre { padding:20px; overflow-x:auto; margin:0; }
+    .code-block code { font-family:var(--font-mono); font-size:14px; line-height:1.8; color:#E8F4FD; background:none; padding:0; border-radius:0; }
+
+    .note { padding:16px 20px; border-radius:var(--radius-md); margin:22px 0; border-right:4px solid; font-size:15px; }
+    .note-info { background:rgba(107,79,187,0.08); border-color:var(--accent-4); }
+    .note-tip  { background:rgba(0,200,150,0.08);  border-color:var(--accent-2); }
+    .note-warn { background:rgba(255,184,0,0.08);  border-color:var(--accent-3); }
+    .note-title { font-weight:700; margin-bottom:6px; font-size:13px; display:flex; align-items:center; gap:7px; }
+
+    .article-sidebar { position:sticky; top:100px; }
+    .sidebar-box { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md); padding:20px; margin-bottom:18px; }
+    .sidebar-box-title { font-size:11px; font-weight:700; font-family:var(--font-mono); color:var(--text-muted); letter-spacing:0.8px; text-transform:uppercase; margin-bottom:14px; display:flex; align-items:center; gap:7px; }
+    .toc-list { list-style:none; }
+    .toc-list li { margin-bottom:6px; }
+    .toc-list a { font-size:13px; color:var(--text-secondary); text-decoration:none; display:flex; align-items:center; gap:8px; padding:5px 0 5px 12px; border-right:2px solid transparent; transition:all var(--transition); }
+    .toc-list a i { font-size:10px; opacity:0.5; }
+    .toc-list a:hover,.toc-list a.active { color:var(--accent-1); border-right-color:var(--accent-1); }
+    .share-btns { display:flex; flex-direction:column; gap:8px; }
+    .share-btn { display:flex; align-items:center; gap:10px; padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--border); background:transparent; font-family:var(--font-ar); font-size:13px; color:var(--text-primary); cursor:pointer; transition:all var(--transition); text-decoration:none; }
+    .share-btn i { width:16px; text-align:center; }
+    .share-btn:hover { background:var(--bg-secondary); transform:translateX(-4px); }
+
+    .article-footer { margin-top:56px; padding-top:36px; border-top:1px solid var(--border); }
+    .related-title { font-size:22px; font-weight:700; margin-bottom:22px; }
+    .related-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
+    @media(max-width:640px){ .related-grid{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+
+  <div class="reading-progress"><div class="progress-bar" id="progress-bar"></div></div>
+  <div class="bg-noise"></div>
+  <div class="bg-orbs"><div class="orb orb-1" style="opacity:0.05;"></div></div>
+
+  <div class="wrapper">
+
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a href="../index.html" class="logo">
+            <div class="logo-mark">&lt;/&gt;</div>
+            <div class="logo-text">
+              <span class="logo-title">كود بالعربي</span>
+              <span class="logo-sub">{ tech blog }</span>
+            </div>
+          </a>
+          <nav class="site-nav">
+            <a href="../index.html"       class="nav-link">الرئيسية</a>
+            <a href="index.html"          class="nav-link active">المقالات</a>
+            <a href="../tools/index.html" class="nav-link">الأدوات</a>
+            <a href="../index.html#about" class="nav-link">عن المدونة</a>
+          </nav>
+          <div class="header-actions">
+            <button class="btn-theme" id="theme-toggle"><i class="fa-solid fa-moon"></i></button>
+            <a href="../index.html#newsletter" class="btn-subscribe">
+              <i class="fa-solid fa-envelope"></i> اشترك مجاناً
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="article-layout">
+
+        <main>
+          <header class="article-header reveal">
+            <nav class="article-breadcrumb">
+              <a href="../index.html"><i class="fa-solid fa-house"></i> الرئيسية</a>
+              <i class="fa-solid fa-chevron-left"></i>
+              <a href="index.html"><i class="fa-solid fa-newspaper"></i> المقالات</a>
+              <i class="fa-solid fa-chevron-left"></i>
+              <span>Async/Await</span>
+            </nav>
+
+            <div class="article-tags">
+              <span class="card-tag tag-js">JavaScript</span>
+              <span class="card-tag" style="background:rgba(0,200,150,0.12);color:var(--accent-2);">مبتدئ+</span>
+            </div>
+
+            <h1 class="article-title">كيف تفهم Async/Await في JavaScript بأسلوب بسيط جداً</h1>
+
+            <div class="article-meta">
+              <div class="author">
+                <div class="author-avatar"><i class="fa-solid fa-user-pen"></i></div>
+                <div>
+                  <div class="author-name">كود بالعربي</div>
+                  <div class="author-role">مطوّر ويب</div>
+                </div>
+              </div>
+              <div class="meta-items">
+                <span class="meta-item"><i class="fa-regular fa-calendar"></i> 2 يناير 2025</span>
+                <span class="meta-item"><i class="fa-regular fa-clock"></i> 8 دقائق</span>
+                <span class="meta-item"><i class="fa-regular fa-eye"></i> 1.2K قراءة</span>
+              </div>
+            </div>
+          </header>
+
+          <article class="article-body reveal">
+
+            <p>واحدة من أكثر المواضيع اللي تخبّل المبتدئين في JavaScript هي الـ <strong>Async/Await</strong>. كثير ناس تقرأ عنها وتحفظها، لكن ما تفهم <em>ليش</em> نستخدمها. في هذا المقال راح نحلها من الصفر.</p>
+
+            <div class="note note-tip">
+              <div class="note-title"><i class="fa-solid fa-lightbulb"></i> قبل ما تكمل</div>
+              المفروض تكون فاهم أساسيات JavaScript (functions، variables). لو ما وصلتها بعد، ارجع لمقال <a href="#">مقدمة في JavaScript</a> أول.
+            </div>
+
+            <h2 id="problem">المشكلة اللي حلّها Async/Await</h2>
+
+            <p>تخيّل إنك تطلب بيانات من API — مثلاً قائمة المستخدمين. هذا الطلب يأخذ وقت. المشكلة إن JavaScript بطبيعتها <strong>لا تنتظر</strong>، تكمل تنفيذ الكود حتى لو البيانات ما وصلت بعد.</p>
+
+            <h2 id="what-is">ما هو Async/Await بالضبط؟</h2>
+
+            <p>بببساطة شديدة: <code>async/await</code> هو <em>سكر نحوي</em> فوق Promises — يعني تحته نفس الشيء، بس الكود أجمل وأسهل للفهم.</p>
+
+            <div class="code-block">
+              <div class="code-block-header">
+                <div class="code-block-dots"><span></span><span></span><span></span></div>
+                <span class="code-block-lang"><i class="fa-brands fa-js"></i> JavaScript</span>
+                <button class="code-copy-btn" onclick="copyCode(this)">
+                  <i class="fa-regular fa-copy"></i> نسخ
+                </button>
+              </div>
+              <pre><code><span class="c-comment">// الطريقة القديمة بـ Promises</span>
+<span class="c-keyword">function</span> <span class="c-func">getUser</span>() {
+  <span class="c-keyword">return</span> <span class="c-func">fetch</span>(<span class="c-string">'/api/user'</span>)
+    .<span class="c-func">then</span>(res <span class="c-op">=></span> res.<span class="c-func">json</span>())
+    .<span class="c-func">then</span>(data <span class="c-op">=></span> <span class="c-func">console</span>.<span class="c-func">log</span>(data))
+    .<span class="c-func">catch</span>(err <span class="c-op">=></span> <span class="c-func">console</span>.<span class="c-func">error</span>(err));
+}
+
+<span class="c-comment">// الطريقة الجديدة بـ Async/Await ✨</span>
+<span class="c-keyword">async function</span> <span class="c-func">getUser</span>() {
+  <span class="c-keyword">try</span> {
+    <span class="c-keyword">const</span> <span class="c-var">res</span>  <span class="c-op">=</span> <span class="c-keyword">await</span> <span class="c-func">fetch</span>(<span class="c-string">'/api/user'</span>);
+    <span class="c-keyword">const</span> <span class="c-var">data</span> <span class="c-op">=</span> <span class="c-keyword">await</span> res.<span class="c-func">json</span>();
+    <span class="c-func">console</span>.<span class="c-func">log</span>(<span class="c-var">data</span>);
+  } <span class="c-keyword">catch</span> (<span class="c-var">err</span>) {
+    <span class="c-func">console</span>.<span class="c-func">error</span>(<span class="c-var">err</span>);
+  }
+}</code></pre>
+            </div>
+
+            <h2 id="rules">القواعد الأساسية (3 فقط)</h2>
+            <ul>
+              <li>كلمة <code>async</code> تُكتب قبل الـ <code>function</code> — وهذا يخلّي الدالة تُرجع Promise تلقائياً.</li>
+              <li>كلمة <code>await</code> تُستخدم <strong>داخل async فقط</strong> — وتخلّي JavaScript "تنتظر" النتيجة.</li>
+              <li>دائماً استخدم <code>try/catch</code> لمعالجة الأخطاء.</li>
+            </ul>
+
+            <div class="note note-warn">
+              <div class="note-title"><i class="fa-solid fa-triangle-exclamation"></i> خطأ شائع</div>
+              كثير مبتدئين يكتبون <code>await</code> خارج دالة <code>async</code>، هذا يعطيك error مباشرة!
+            </div>
+
+            <h2 id="example">مثال عملي من الواقع</h2>
+
+            <div class="code-block">
+              <div class="code-block-header">
+                <div class="code-block-dots"><span></span><span></span><span></span></div>
+                <span class="code-block-lang"><i class="fa-brands fa-js"></i> JavaScript — مثال كامل</span>
+                <button class="code-copy-btn" onclick="copyCode(this)">
+                  <i class="fa-regular fa-copy"></i> نسخ
+                </button>
+              </div>
+              <pre><code><span class="c-keyword">async function</span> <span class="c-func">getUsers</span>() {
+  <span class="c-keyword">try</span> {
+    <span class="c-keyword">const</span> <span class="c-var">response</span> <span class="c-op">=</span> <span class="c-keyword">await</span> <span class="c-func">fetch</span>(
+      <span class="c-string">'https://jsonplaceholder.typicode.com/users'</span>
+    );
+    <span class="c-keyword">const</span> <span class="c-var">users</span> <span class="c-op">=</span> <span class="c-keyword">await</span> <span class="c-var">response</span>.<span class="c-func">json</span>();
+    <span class="c-var">users</span>.<span class="c-func">forEach</span>((<span class="c-var">user</span>) <span class="c-op">=></span> {
+      <span class="c-func">console</span>.<span class="c-func">log</span>(<span class="c-string">`👤 <span class="c-op">${</span><span class="c-var">user</span>.name<span class="c-op">}</span>`</span>);
+    });
+  } <span class="c-keyword">catch</span> (<span class="c-var">error</span>) {
+    <span class="c-func">console</span>.<span class="c-func">error</span>(<span class="c-string">'خطأ:'</span>, <span class="c-var">error</span>);
+  }
+}
+<span class="c-func">getUsers</span>();</code></pre>
+            </div>
+
+            <h2 id="summary">الخلاصة</h2>
+            <ul>
+              <li><code>async</code> قبل الدالة → الدالة ترجع Promise</li>
+              <li><code>await</code> قبل العملية → انتظر النتيجة</li>
+              <li><code>try/catch</code> → لمعالجة الأخطاء</li>
+            </ul>
+
+            <div class="note note-info">
+              <div class="note-title"><i class="fa-solid fa-bookmark"></i> المقال القادم</div>
+              سنتعلم كيف نستخدم <strong>Promise.all()</strong> مع Async/Await لتشغيل عدة طلبات بالتوازي. اشترك في النشرة ما تفوته!
+            </div>
+
+          </article>
+
+          <div class="article-footer reveal">
+            <h3 class="related-title">قد يعجبك أيضاً</h3>
+            <div class="related-grid">
+              <a href="article.html" class="article-card">
+                <div class="card-image"><div class="card-image-inner bg-grad-2">
+                  <i class="fa-brands fa-js card-cat-icon" style="color:#FFB800;"></i>
+                </div></div>
+                <div class="card-content">
+                  <div class="card-meta"><span class="card-tag tag-js">JavaScript</span></div>
+                  <h3 class="card-title">Promises شرح مبسط للمبتدئين</h3>
+                  <div class="card-footer">
+                    <span class="card-read"><i class="fa-regular fa-clock"></i> 6 دقائق</span>
+                    <span class="card-arrow"><i class="fa-solid fa-arrow-left"></i></span>
+                  </div>
+                </div>
+              </a>
+              <a href="article.html" class="article-card">
+                <div class="card-image"><div class="card-image-inner bg-grad-3">
+                  <i class="fa-solid fa-globe card-cat-icon" style="color:#00C896;"></i>
+                </div></div>
+                <div class="card-content">
+                  <div class="card-meta"><span class="card-tag tag-js">JavaScript</span></div>
+                  <h3 class="card-title">Fetch API: كيف تتعامل مع APIs بثقة</h3>
+                  <div class="card-footer">
+                    <span class="card-read"><i class="fa-regular fa-clock"></i> 7 دقائق</span>
+                    <span class="card-arrow"><i class="fa-solid fa-arrow-left"></i></span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </main>
+
+        <aside class="article-sidebar">
+          <div class="sidebar-box">
+            <div class="sidebar-box-title"><i class="fa-solid fa-list"></i> محتوى المقال</div>
+            <ul class="toc-list">
+              <li><a href="#problem" class="active"><i class="fa-solid fa-circle-dot"></i> المشكلة التي حلّها</a></li>
+              <li><a href="#what-is"><i class="fa-solid fa-circle-dot"></i> ما هو Async/Await؟</a></li>
+              <li><a href="#rules"><i class="fa-solid fa-circle-dot"></i> القواعد الأساسية</a></li>
+              <li><a href="#example"><i class="fa-solid fa-circle-dot"></i> مثال عملي</a></li>
+              <li><a href="#summary"><i class="fa-solid fa-circle-dot"></i> الخلاصة</a></li>
+            </ul>
+          </div>
+          <div class="sidebar-box">
+            <div class="sidebar-box-title"><i class="fa-solid fa-share-nodes"></i> شارك المقال</div>
+            <div class="share-btns">
+              <a href="#" class="share-btn"><i class="fa-brands fa-x-twitter"></i> Twitter / X</a>
+              <a href="#" class="share-btn"><i class="fa-brands fa-instagram"></i> Instagram</a>
+              <a href="#" class="share-btn" onclick="navigator.clipboard.writeText(location.href);return false;">
+                <i class="fa-solid fa-link"></i> نسخ الرابط
+              </a>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-bottom">
+          <p class="footer-copy">
+            <i class="fa-regular fa-copyright"></i>
+            2025 كود بالعربي · صُنع بـ <i class="fa-solid fa-heart" style="color:var(--accent-1);"></i> للمجتمع التقني العربي
+          </p>
+          <span class="footer-mono">v1.0.0</span>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script>
+    window.addEventListener('scroll', () => {
+      const total = document.body.scrollHeight - window.innerHeight;
+      document.getElementById('progress-bar').style.width = (window.scrollY / total * 100) + '%';
+    }, { passive: true });
+
+    const headings  = document.querySelectorAll('h2[id]');
+    const tocLinks  = document.querySelectorAll('.toc-list a');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      headings.forEach(h => { if (window.scrollY >= h.offsetTop - 120) current = h.id; });
+      tocLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+    }, { passive: true });
+  </script>
+</body>
+</html>

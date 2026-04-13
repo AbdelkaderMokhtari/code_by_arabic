@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="10 خصائص CSS يستخدمها المحترفون يومياً وما تجد عنها مقالات عربية — مع أمثلة عملية جاهزة" />
+  <title>10 خصائص CSS ستغير طريقة برمجتك | كود بالعربي</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23FF4D3D'/><text y='22' x='5' font-size='16' fill='white' font-family='monospace' font-weight='bold'>&lt;/&gt;</text></svg>" />
+  <style>
+    .reading-progress { position:fixed; top:0; right:0; left:0; height:3px; background:rgba(0,0,0,0.08); z-index:200; }
+    .progress-bar { height:100%; background:linear-gradient(90deg,var(--accent-1),var(--accent-4),var(--accent-2)); width:0%; transition:width 0.1s linear; }
+
+    .article-layout { display:grid; grid-template-columns:1fr 270px; gap:48px; padding:44px 0 80px; align-items:start; }
+    @media(max-width:1024px){ .article-layout{grid-template-columns:1fr;} .article-sidebar{display:none;} }
+
+    .article-breadcrumb { display:flex; gap:8px; align-items:center; font-size:13px; color:var(--text-muted); margin-bottom:22px; flex-wrap:wrap; }
+    .article-breadcrumb a { color:var(--text-muted); text-decoration:none; display:flex; align-items:center; gap:5px; }
+    .article-breadcrumb a:hover { color:var(--accent-1); }
+    .article-breadcrumb i { font-size:10px; opacity:0.5; }
+
+    .article-tags { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; }
+    .article-title { font-size:clamp(24px,4vw,42px); font-weight:700; line-height:1.3; margin-bottom:20px; }
+
+    .article-meta { display:flex; align-items:center; gap:20px; padding:16px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border); margin-bottom:32px; flex-wrap:wrap; }
+    .author { display:flex; align-items:center; gap:10px; }
+    .author-avatar { width:40px; height:40px; border-radius:50%; background:linear-gradient(135deg,var(--accent-1),var(--accent-4)); display:flex; align-items:center; justify-content:center; font-size:16px; color:#fff; flex-shrink:0; }
+    .author-name { font-size:14px; font-weight:600; }
+    .author-role { font-size:12px; color:var(--text-muted); }
+    .meta-items { display:flex; gap:16px; flex-wrap:wrap; margin-right:auto; }
+    .meta-item { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-muted); font-family:var(--font-mono); }
+    .meta-item i { font-size:11px; }
+
+    .article-body { font-size:17px; line-height:1.9; }
+    .article-body h2 { font-size:25px; font-weight:700; margin:44px 0 18px; padding-bottom:12px; border-bottom:2px solid var(--border); }
+    .article-body h2::before { content:'## '; font-family:var(--font-mono); font-size:15px; color:var(--accent-2); }
+    .article-body h3 { font-size:20px; font-weight:700; margin:34px 0 14px; }
+    .article-body p { margin-bottom:20px; }
+    .article-body a { color:var(--accent-4); text-decoration:underline; text-underline-offset:3px; }
+    .article-body ul,.article-body ol { padding-right:24px; margin-bottom:20px; }
+    .article-body li { margin-bottom:8px; }
+    .article-body code { font-family:var(--font-mono); font-size:14px; background:var(--bg-secondary); padding:2px 7px; border-radius:4px; }
+
+    .code-block { background:var(--bg-code); border-radius:var(--radius-md); overflow:hidden; margin:26px 0; border:1px solid rgba(255,255,255,0.05); box-shadow:var(--shadow-md); }
+    .code-block-header { background:rgba(255,255,255,0.04); padding:10px 16px; display:flex; align-items:center; gap:10px; }
+    .code-block-dots { display:flex; gap:5px; }
+    .code-block-dots span { width:9px; height:9px; border-radius:50%; }
+    .code-block-dots span:nth-child(1){background:#FF5F57;}
+    .code-block-dots span:nth-child(2){background:#FFBD2E;}
+    .code-block-dots span:nth-child(3){background:#28CA41;}
+    .code-block-lang { font-family:var(--font-mono); font-size:11px; color:#777; margin-right:auto; }
+    .code-copy-btn { display:inline-flex; align-items:center; gap:6px; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1); color:#aaa; font-size:11px; font-family:var(--font-mono); padding:4px 10px; border-radius:4px; cursor:pointer; transition:all var(--transition); }
+    .code-copy-btn:hover { background:rgba(255,255,255,0.14); color:#fff; }
+    .code-copy-btn.copied { color:var(--accent-2); border-color:var(--accent-2); }
+    .code-block pre { padding:20px; overflow-x:auto; margin:0; }
+    .code-block code { font-family:var(--font-mono); font-size:14px; line-height:1.8; color:#E8F4FD; background:none; padding:0; border-radius:0; }
+
+    .note { padding:16px 20px; border-radius:var(--radius-md); margin:22px 0; border-right:4px solid; font-size:15px; }
+    .note-info { background:rgba(107,79,187,0.08); border-color:var(--accent-4); }
+    .note-tip  { background:rgba(0,200,150,0.08);  border-color:var(--accent-2); }
+    .note-warn { background:rgba(255,184,0,0.08);  border-color:var(--accent-3); }
+    .note-title { font-weight:700; margin-bottom:6px; font-size:13px; display:flex; align-items:center; gap:7px; }
+
+    /* بطاقة المعاينة */
+    .css-preview {
+      border:1px solid var(--border); border-radius:var(--radius-md);
+      overflow:hidden; margin:26px 0;
+    }
+    .css-preview-header {
+      padding:10px 16px; background:var(--bg-secondary);
+      display:flex; align-items:center; gap:8px;
+      font-family:var(--font-mono); font-size:12px; color:var(--text-muted);
+    }
+    .css-preview-body {
+      padding:28px; background:var(--bg-card);
+      display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:16px;
+      min-height:100px;
+    }
+
+    .article-sidebar { position:sticky; top:100px; }
+    .sidebar-box { background:var(--bg-card); border:1px solid var(--border); border-radius:var(--radius-md); padding:20px; margin-bottom:18px; }
+    .sidebar-box-title { font-size:11px; font-weight:700; font-family:var(--font-mono); color:var(--text-muted); letter-spacing:0.8px; text-transform:uppercase; margin-bottom:14px; display:flex; align-items:center; gap:7px; }
+    .toc-list { list-style:none; }
+    .toc-list li { margin-bottom:6px; }
+    .toc-list a { font-size:13px; color:var(--text-secondary); text-decoration:none; display:flex; align-items:center; gap:8px; padding:5px 0 5px 12px; border-right:2px solid transparent; transition:all var(--transition); }
+    .toc-list a i { font-size:10px; opacity:0.5; }
+    .toc-list a:hover,.toc-list a.active { color:var(--accent-1); border-right-color:var(--accent-1); }
+    .share-btns { display:flex; flex-direction:column; gap:8px; }
+    .share-btn { display:flex; align-items:center; gap:10px; padding:10px 14px; border-radius:var(--radius-sm); border:1px solid var(--border); background:transparent; font-family:var(--font-ar); font-size:13px; color:var(--text-primary); cursor:pointer; transition:all var(--transition); text-decoration:none; }
+    .share-btn i { width:16px; text-align:center; }
+    .share-btn:hover { background:var(--bg-secondary); transform:translateX(-4px); }
+
+    .article-footer { margin-top:56px; padding-top:36px; border-top:1px solid var(--border); }
+    .related-title { font-size:22px; font-weight:700; margin-bottom:22px; }
+    .related-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; }
+    @media(max-width:640px){ .related-grid{grid-template-columns:1fr;} }
+
+    /* ترقيم الخصائص */
+    .prop-number {
+      display:inline-flex; align-items:center; justify-content:center;
+      width:32px; height:32px; border-radius:50%;
+      background:linear-gradient(135deg,var(--accent-4),var(--accent-1));
+      color:#fff; font-size:14px; font-weight:700;
+      font-family:var(--font-mono); flex-shrink:0;
+      margin-left:10px; vertical-align:middle;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="reading-progress"><div class="progress-bar" id="progress-bar"></div></div>
+  <div class="bg-noise"></div>
+  <div class="bg-orbs"><div class="orb orb-2" style="opacity:0.06;"></div></div>
+
+  <div class="wrapper">
+
+    <!-- ══ هيدر ══ -->
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a href="../index.html" class="logo">
+            <div class="logo-mark">&lt;/&gt;</div>
+            <div class="logo-text">
+              <span class="logo-title">كود بالعربي</span>
+              <span class="logo-sub">{ tech blog }</span>
+            </div>
+          </a>
+          <nav class="site-nav">
+            <a href="../index.html"       class="nav-link">الرئيسية</a>
+            <a href="index.html"          class="nav-link active">المقالات</a>
+            <a href="../tools/index.html" class="nav-link">الأدوات</a>
+            <a href="../index.html#about" class="nav-link">عن المدونة</a>
+          </nav>
+          <div class="header-actions">
+            <button class="btn-theme" id="theme-toggle"><i class="fa-solid fa-moon"></i></button>
+            <a href="../index.html#newsletter" class="btn-subscribe">
+              <i class="fa-solid fa-envelope"></i> اشترك مجاناً
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ══ محتوى المقال ══ -->
+    <div class="container">
+      <div class="article-layout">
+
+        <main>
+
+          <!-- رأس المقال -->
+          <header class="article-header reveal">
+            <nav class="article-breadcrumb">
+              <a href="../index.html"><i class="fa-solid fa-house"></i> الرئيسية</a>
+              <i class="fa-solid fa-chevron-left"></i>
+              <a href="index.html"><i class="fa-solid fa-newspaper"></i> المقالات</a>
+              <i class="fa-solid fa-chevron-left"></i>
+              <span>10 خصائص CSS</span>
+            </nav>
+
+            <div class="article-tags">
+              <span class="card-tag tag-css">CSS</span>
+              <span class="card-tag" style="background:rgba(0,200,150,0.12);color:var(--accent-2);">متوسط</span>
+            </div>
+
+            <h1 class="article-title">
+              10 خصائص CSS ستغير طريقة برمجتك للأبد
+            </h1>
+
+            <div class="article-meta">
+              <div class="author">
+                <div class="author-avatar"><i class="fa-solid fa-user-pen"></i></div>
+                <div>
+                  <div class="author-name">كود بالعربي</div>
+                  <div class="author-role">مطوّر ويب</div>
+                </div>
+              </div>
+              <div class="meta-items">
+                <span class="meta-item"><i class="fa-regular fa-calendar"></i> 5 يناير 2025</span>
+                <span class="meta-item"><i class="fa-regular fa-clock"></i> 5 دقائق</span>
+                <span class="meta-item"><i class="fa-regular fa-eye"></i> 980 قراءة</span>
+              </div>
+            </div>
+          </header>
+
+          <!-- جسم المقال -->
+          <article class="article-body reveal">
+
+            <p>
+              كثير مطورين يكتبون CSS بنفس الطريقة من سنوات — يكتبون <code>margin</code>، <code>padding</code>، <code>flex</code>،
+              ويفكرون إنهم يعرفون كل شيء. لكن CSS فيها خصائص قوية جداً يتجاهلها الأغلب،
+              ولما تكتشفها تتساءل كيف كنت تشتغل بدونها!
+            </p>
+
+            <p>
+              في هذا المقال، 10 خصائص حقيقية مع أمثلة كود جاهزة تقدر تنسخها مباشرة.
+            </p>
+
+            <div class="note note-tip">
+              <div class="note-title"><i class="fa-solid fa-lightbulb"></i> ملاحظة</div>
+              كل الخصائص هنا مدعومة في المتصفحات الحديثة بنسبة 95%+. يمكنك التحقق دائماً على
+              <a href="https://caniuse.com" target="_blank">caniuse.com</a>.
+            </div>
+
+            <!-- 1 -->
+            <h2 id="clamp">
+              <span class="prop-number">1</span> clamp() — حجم خط ذكي بدون media queries
+            </h2>
+
+            <p>
+              بدل ما تكتب <code>font-size</code> مختلف لكل breakpoint، <code>clamp()</code>
+              تخلّي الحجم يكبر ويصغر تلقائياً بين حد أدنى وحد أقصى.
+            </p>
+
+            <div class="code-block">
+              <div class="code-block-header">
+                <div class="code-block-dots"><span></span><span></span><span></span></div>
+                <span class="code-block-lang"><i class="fa-brands fa-css3-alt"></i> CSS</span>
+                <button class="code-copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> نسخ</button>
+              </div>
+              <pre><code><span class="c-comment">/* الطريقة القديمة */</span>
+<span class="c-var">h1</span> { <span class="c-keyword">font-size</span>: <span class="c-num">24px</span>; }
+<span class="c-keyword">@media</span> (<span class="c-var">min-width</span>: <span class="c-num">768px</span>) {
+  <span class="c-var">h1</span> { <span class="c-keyword">font-size</span>: <span class="c-num">36px</span>; }
+}
+<span class="c-keyword">@media</span> (<span class="c-var">min-width</span>: <span class="c-num">1200px</span>) {
+  <span class="c-var">h1</span> { <span class="c-keyword">font-size</span>: <span class="c-num">48px</span>; }
+}
+
+<span class="c-comment">/* الطريقة الذكية بـ clamp() ✨ */</span>
+<span class="c-var">h1</span> {
+  <span class="c-comment">/* min: 24px | preferred: 5vw | max: 48px */</span>
+  <span class="c-keyword">font-size</span>: <span class="c-func">clamp</span>(<span class="c-num">24px</span>, <span class="c-num">5vw</span>, <span class="c-num">48px</span>);
+}</code></pre>
+            </div>
+
+            <!-- 2 -->
+            <h2 id="gap">
+              <span class="prop-number">2</span> gap — المسافة بين العناصر بدون margin
+            </h2>
+
+            <p>
+              بدل ما تكتب <code>margin-bottom</code> أو <code>margin-left</code> على كل عنصر،
+              استخدم <code>gap</code> مباشرة على الـ container. يشتغل مع <code>flex</code> و <code>grid</code>.
+            </p>
+
+            <div class="code-block">
+              <div class="code-block-header">
+                <div class="code-block-dots"><span></span><span></span><span></span></div>
+                <span class="code-block-lang"><i class="fa-brands fa-css3-alt"></i> CSS</span>
+                <button class="code-copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> نسخ</button>
+              </div>
+              <pre><code><span class="c-comment">/* قديم — تحديد margin على كل عنصر */</span>
+<span class="c-var">.card</span> { <span class="c-keyword">margin-bottom</span>: <span class="c-num">16px</span>; }
+<span class="c-var">.card</span>:<span class="c-func">last-child</span> { <span class="c-keyword">margin-bottom</span>: <span class="c-num">0</span>; }
+
+<span class="c-comment">/* جديد — gap على الـ container فقط ✨ */</span>
+<span class="c-var">.cards-container</span> {
+  <span class="c-keyword">display</span>: <span class="c-string">flex</span>;
+  <span class="c-keyword">flex-direction</span>: <span class="c-string">column</span>;
+  <span class="c-keyword">gap</span>: <span class="c-num">16px</span>; <span class="c-comment">/* يطبّق على الكل تلقائياً */</span>
+}
+
+<span class="c-comment">/* أو مع grid: gap مختلف أفقياً وعمودياً */</span>
+<span class="c-var">.grid</span> {
+  <span class="c-keyword">display</span>: <span class="c-string">grid</span>;
+  <span class="c-keyword">gap</span>: <span class="c-num">24px</span> <span class="c-num">16px</span>; <span class="c-comment">/* row-gap column-gap */</span>
+}</code></pre>
+            </div>
+
+            <!-- 3 -->
+            <h2 id="aspect-ratio">
+              <span class="prop-number">3</span> aspect-ratio — نسبة أبعاد ثابتة بدون هاك
+            </h2>
+
+            <p>
+              قديماً كنا نستخدم الـ padding-bottom hack لنحافظ على نسبة 16:9 مثلاً.
+              الآن خاصية <code>aspect-ratio</code> تحل المشكلة بسطر واحد.
+            </p>
+
+            <div class="code-block">
+              <div class="code-block-header">
+                <div class="code-block-dots"><span></span><span></span><span></span></div>
+                <span class="code-block-lang"><i class="fa-brands fa-css3-alt"></i> CSS</span>
+                <button class="code-copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> نسخ</button>
+              </div>
+              <pre><code><span class="c-comment">/* الهاك القديم القبيح 😅 */</span>
+<span class="c-var">.video-wrapper</span> {
+  <span class="c-keyword">position</span>: <span class="c-string">relative</span>;
+  <span class="c-keyword">padding-bottom</span>: <span class="c-num">56.25%</span>; <span class="c-comment">/* 16:9 */</span>
+  <span class="c-keyword">height</span>: <span class="c-num">0</span>;
+}
+
+<span class="c-comment">/* الطريقة الحديثة ✨ */</span>
+<span class="c-var">.video-wrapper</span> {
+  <span class="c-keyword">aspect-ratio</span>: <span class="c-num">16 / 9</span>;
+  <span class="c-keyword">width</span>: <span class="c-num">100%</span>;
+}
+
+<span class="c-comment">/* مربع دائماً مهما تغيّر العرض */</span>
+<span class="c-var">.avatar</span> {
+  <span class="c-keyword">width</span>: <span class="c-num">100%</span>;
+  <span class="c-keyword">aspect-ratio</span>: <span class="c-num">1 / 1</span>;
+  <span class="c-keyword">border-radius</span>: <span class="c-num">50%</span>;
+}</code></pre>
+            </div>
+
+            <!-- 4 -->
+            <h2 id="logical">
+              <span class="prop-number">4</span> Logical Properties — CSS يدعم العربية تلقائياً
+            </h2>
+
+            <p>
+              لو موقعك يدعم RTL (عربي) وLTR (إنجليزي)، الـ Logical Properties تتكيّف تلقائياً
+              بدون ما تكتب <code>dir</code> يدوياً.
+            </p>
+
+            <div class="code-block">
+              <div class="code-block-header">
+                <div class="code-block-dots"><span></span><span></span><span></span></div>
+                <span class="code-block-lang"><i class="fa-brands fa-css3-alt"></i> CSS</span>
+                <button class="code-copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> نسخ</button>
+              </div>
+              <pre><code><span class="c-comment">/* Physical — ثابت، لا يتكيّف مع RTL */</span>
+<span class="c-var">.btn</span> {
+  <span class="c-keyword">padding-left</span>:  <span class="c-num">16px</span>;
+  <span class="c-keyword">padding-right</span>: <span class="c-num">16px</span>;
+  <span class="c-keyword">margin-left</span>:   <span class="c-num">8px</span>;
+  <span class="c-keyword">border-left</span>:   <span class="c-num">3px</span> <span class="c-string">solid</span> <span class="c-string">blue</span>;
+}
+
+<span class="c-comment">/* Logical — يتكيّف مع RTL/LTR تلقائياً ✨ */</span>
+<span class="c-var">.btn</span> {
+  <span class="c-keyword">padding-inline</span>: <span class="c-num">16px</span>;   <span class="c-comment">/* left + right */</span>
+  <span class="c-keyword">margin-inline-start</span>: <span class="c-num">8px</span>; <span class="c-comment">/* يمين في RTL */</span>
+  <span class="c-keyword">border-inline-start</span>: <span class="c-num">3px</span> <span class="c-string">solid</span> <span class="c-string">blue</span>;
+}</code></pre>
+            </div>
+
+            <!-- 5 -->
+            <h2 id="custom-props">
+              <span class="prop-number">5</span> CSS Custom Properties — متغيرات حقيقية في CSS
+            </h2>
+
+            <p>
+              الـ CSS Variables (أو Custom Properties) تخلّيك تعرّف قيمة مرة وتستخدمها في كل مكان.
+              لما تغيّر القيمة في مكان واحد، تتغيّر في كل الـ codebase.
+            </p>
+
+            <div class="code-block">
+              <div class="code-block-header">
+                <div class="code-block-dots"><span></span><span></span><span></span></div>
+                <span class="code-block-lang"><i class="fa-brands fa-css3-alt"></i> CSS</span>
+                <button class="code-copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> نسخ</button>
+              </div>
+              <pre><code><span class="c-comment">/* تعريف المتغيرات في :root */</span>
+<span class="c-var">:root</span> {
+  <span class="c-keyword">--color-primary</span>: <span class="c-string">#6B4FBB</span>;
+  <span class="c-keyword">--color-accent</span>:  <span class="c-string">#FF4D3D</span>;
+  <span class="c-keyword">--radius</span>:        <span class="c-string">12px</span>;
+  <span class="c-keyword">--shadow</span>:        <span class="c-string">0 4px 20px rgba(0,0,0,0.1)</span>;
+}
+
+<span class="c-comment">/* استخدامها في أي مكان */</span>
+<span class="c-var">.btn</span> {
+  <span class="c-keyword">background</span>:    <span class="c-func">var</span>(<span class="c-keyword">--color-primary</span>);
+  <span class="c-keyword">border-radius</span>: <span class="c-func">var</span>(<span class="c-keyword">--radius</span>);
+  <span class="c-keyword">box-shadow</span>:    <span class="c-func">var</span>(<span class="c-keyword">--shadow</span>);
+}
+
+<span class="c-comment">/* Dark mode بسطرين فقط! */</span>
+<span class="c-var">[data-theme="dark"]</span> {
+  <span class="c-keyword">--color-primary</span>: <span class="c-string">#9B7FE8</span>;
+}</code></pre>
+            </div>
+
+            <!-- 6 -->
+            <h2 id="has">
+              <span class="prop-number">6</span> :has() — "Parent Selector" اللي انتظرناه 10 سنوات
+            </h2>
+
+            <p>
+              لسنوات كان المطورون يطلبون parent selector في CSS — يعني استهداف عنصر بناءً على
+              ما يحتويه. الآن <code>:has()</code> موجودة رسمياً!
+            </p>
+
+            <div class="code-block">
+              <div class="code-block-header">
+                <div class="code-block-dots"><span></span><span></span><span></span></div>
+                <span class="code-block-lang"><i class="fa-brands fa-css3-alt"></i> CSS</span>
+                <button class="code-copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> نسخ</button>
+              </div>
+              <pre><code><span class="c-comment">/* استهدف البطاقة إذا تحتوي صورة */</span>
+<span class="c-var">.card</span>:<span class="c-func">has</span>(<span class="c-var">img</span>) {
+  <span class="c-keyword">padding-top</span>: <span class="c-num">0</span>;
+}
+
+<span class="c-comment">/* label يتلوّن لما الـ input مركّز عليه */</span>
+<span class="c-var">.form-group</span>:<span class="c-func">has</span>(<span class="c-var">input</span>:<span class="c-func">focus</span>) <span class="c-var">label</span> {
+  <span class="c-keyword">color</span>: <span class="c-func">var</span>(<span class="c-keyword">--color-primary</span>);
+  <span class="c-keyword">font-weight</span>: <span class="c-num">700</span>;
+}
+
+<span class="c-comment">/* nav يتغيّر لو فيه قائمة مفتوحة */</span>
+<span class="c-var">nav</span>:<span class="c-func">has</span>(<span class="c-var">.dropdown</span>.<span class="c-var">open</span>) {
+  <span class="c-keyword">background</span>: <span class="c-string">rgba(0,0,0,0.5)</span>;
+}</code></pre>
+            </div>
+
+            <div class="note note-warn">
+              <div class="note-title"><i class="fa-solid fa-triangle-exclamation"></i> تنبيه</div>
+              <code>:has()</code> غير مدعومة في Firefox الإصدارات الأقدم من 121. تحقق من
+              <a href="https://caniuse.com/css-has" target="_blank">caniuse</a> قبل الاستخدام في Production.
+            </div>
+
+            <!-- 7 -->
+            <h2 id="grid-auto">
+              <span class="prop-number">7</span> grid-template-columns: repeat(auto-fill, minmax())
+            </h2>
+
+            <p>
+              هذا الكومبو الذهبي في CSS Grid يعطيك شبكة responsive بدون أي media query — الأعمدة
+              تتكيّف تلقائياً حسب المساحة المتاحة.
+            </p>
+
+            <div class="code-block">
+              <div class="code-block-header">
+                <div class="code-block-dots"><span></span><span></span><span></span></div>
+                <span class="code-block-lang"><i class="fa-brands fa-css3-alt"></i> CSS</span>
+                <button class="code-copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> نسخ</button>
+              </div>
+              <pre><code><span class="c-var">.cards-grid</span> {
+  <span class="c-keyword">display</span>: <span class="c-string">grid</span>;
+  <span class="c-comment">/*
+    auto-fill: ملّي الصف بأكبر عدد من الأعمدة
+    minmax(280px, 1fr): كل عمود لا يقل عن 280px
+    النتيجة: responsive بدون media queries!
+  */</span>
+  <span class="c-keyword">grid-template-columns</span>: <span class="c-func">repeat</span>(<span class="c-string">auto-fill</span>, <span class="c-func">minmax</span>(<span class="c-num">280px</span>, <span class="c-num">1fr</span>));
+  <span class="c-keyword">gap</span>: <span class="c-num">24px</span>;
+}</code></pre>
+            </div>
+
+            <!-- 8 -->
+            <h2 id="place-items">
+              <span class="prop-number">8</span> place-items: center — توسيط بسطر واحد
+            </h2>
+
+            <p>
+              نسيت كيف تتوسّط عنصر؟ هذا الكود يحل المشكلة بسطر واحد — <code>place-items</code>
+              هو اختصار لـ <code>align-items</code> + <code>justify-items</code>.
+            </p>
+
+            <div class="code-block">
+              <div class="code-block-header">
+                <div class="code-block-dots"><span></span><span></span><span></span></div>
+                <span class="code-block-lang"><i class="fa-brands fa-css3-alt"></i> CSS</span>
+                <button class="code-copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> نسخ</button>
+              </div>
+              <pre><code><span class="c-comment">/* توسيط كامل بدون أي حسابات */</span>
+<span class="c-var">.center-me</span> {
+  <span class="c-keyword">display</span>: <span class="c-string">grid</span>;
+  <span class="c-keyword">place-items</span>: <span class="c-string">center</span>; <span class="c-comment">/* = align + justify */</span>
+  <span class="c-keyword">min-height</span>: <span class="c-num">100vh</span>;
+}
+
+<span class="c-comment">/* أو بـ flex */</span>
+<span class="c-var">.center-flex</span> {
+  <span class="c-keyword">display</span>: <span class="c-string">flex</span>;
+  <span class="c-keyword">align-items</span>: <span class="c-string">center</span>;
+  <span class="c-keyword">justify-content</span>: <span class="c-string">center</span>;
+}</code></pre>
+            </div>
+
+            <!-- 9 -->
+            <h2 id="scroll-snap">
+              <span class="prop-number">9</span> scroll-snap — سلايدر بدون JavaScript
+            </h2>
+
+            <p>
+              تريد تعمل سلايدر أو carousel؟ <code>scroll-snap</code> تعطيك تأثير الـ snap
+              بدون أي سطر JavaScript.
+            </p>
+
+            <div class="code-block">
+              <div class="code-block-header">
+                <div class="code-block-dots"><span></span><span></span><span></span></div>
+                <span class="code-block-lang"><i class="fa-brands fa-css3-alt"></i> CSS</span>
+                <button class="code-copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> نسخ</button>
+              </div>
+              <pre><code><span class="c-comment">/* الـ container */</span>
+<span class="c-var">.slider</span> {
+  <span class="c-keyword">display</span>: <span class="c-string">flex</span>;
+  <span class="c-keyword">overflow-x</span>: <span class="c-string">auto</span>;
+  <span class="c-keyword">scroll-snap-type</span>: <span class="c-string">x mandatory</span>;
+  <span class="c-keyword">gap</span>: <span class="c-num">16px</span>;
+  <span class="c-keyword">scrollbar-width</span>: <span class="c-string">none</span>; <span class="c-comment">/* تخفي الـ scrollbar */</span>
+}
+
+<span class="c-comment">/* كل slide */</span>
+<span class="c-var">.slide</span> {
+  <span class="c-keyword">flex-shrink</span>: <span class="c-num">0</span>;
+  <span class="c-keyword">width</span>: <span class="c-num">100%</span>;
+  <span class="c-keyword">scroll-snap-align</span>: <span class="c-string">start</span>;
+}</code></pre>
+            </div>
+
+            <!-- 10 -->
+            <h2 id="container">
+              <span class="prop-number">10</span> Container Queries — الـ Responsive الحقيقي
+            </h2>
+
+            <p>
+              الـ Media Queries تعمل بناءً على حجم الشاشة. لكن الـ Container Queries تعمل بناءً
+              على حجم الـ container نفسه — وهذا يعني كومبوننت واحد يتكيّف في أي مكان تضعه!
+            </p>
+
+            <div class="code-block">
+              <div class="code-block-header">
+                <div class="code-block-dots"><span></span><span></span><span></span></div>
+                <span class="code-block-lang"><i class="fa-brands fa-css3-alt"></i> CSS</span>
+                <button class="code-copy-btn" onclick="copyCode(this)"><i class="fa-regular fa-copy"></i> نسخ</button>
+              </div>
+              <pre><code><span class="c-comment">/* 1. عرّف الـ container */</span>
+<span class="c-var">.card-wrapper</span> {
+  <span class="c-keyword">container-type</span>: <span class="c-string">inline-size</span>;
+  <span class="c-keyword">container-name</span>: <span class="c-string">card</span>;
+}
+
+<span class="c-comment">/* 2. استخدم @container بدل @media */</span>
+<span class="c-keyword">@container</span> <span class="c-var">card</span> (<span class="c-var">min-width</span>: <span class="c-num">400px</span>) {
+  <span class="c-var">.card</span> {
+    <span class="c-keyword">display</span>: <span class="c-string">flex</span>; <span class="c-comment">/* أفقي لما المساحة تكفي */</span>
+    <span class="c-keyword">flex-direction</span>: <span class="c-string">row</span>;
+  }
+}</code></pre>
+            </div>
+
+            <div class="note note-info">
+              <div class="note-title"><i class="fa-solid fa-circle-info"></i> خلاصة سريعة</div>
+              <strong>clamp()</strong> للخطوط الـ responsive ·
+              <strong>gap</strong> بدل margin ·
+              <strong>aspect-ratio</strong> بدل padding-hack ·
+              <strong>:has()</strong> للـ parent selector ·
+              <strong>Container Queries</strong> للـ responsive الحقيقي.
+            </div>
+
+            <h2 id="summary">الخلاصة</h2>
+
+            <p>
+              هذه الخصائص العشر ليست مجرد اختصارات — هي طريقة تفكير مختلفة في كتابة CSS.
+              كل خاصية منها حلّت مشكلة كنّا نعالجها بكود معقد أو JavaScript زائد.
+            </p>
+            <p>
+              ابدأ بـ <code>clamp()</code> و <code>gap</code> و <code>aspect-ratio</code> — ستلاحظ الفرق فوراً في مشاريعك.
+            </p>
+
+            <div class="note note-tip">
+              <div class="note-title"><i class="fa-solid fa-bookmark"></i> المقال القادم</div>
+              سنتكلم عن <strong>CSS Animations</strong> من الصفر — كيف تبني انيميشن احترافي
+              بدون أي مكتبة. اشترك في النشرة ما تفوته!
+            </div>
+
+          </article>
+
+          <!-- مقالات ذات صلة -->
+          <div class="article-footer reveal">
+            <h3 class="related-title">قد يعجبك أيضاً</h3>
+            <div class="related-grid">
+              <a href="article.html" class="article-card">
+                <div class="card-image"><div class="card-image-inner bg-grad-1">
+                  <i class="fa-brands fa-js card-cat-icon" style="color:#FFB800;"></i>
+                </div></div>
+                <div class="card-content">
+                  <div class="card-meta"><span class="card-tag tag-js">JavaScript</span></div>
+                  <h3 class="card-title">كيف تفهم Async/Await بأسلوب بسيط جداً</h3>
+                  <div class="card-footer">
+                    <span class="card-read"><i class="fa-regular fa-clock"></i> 8 دقائق</span>
+                    <span class="card-arrow"><i class="fa-solid fa-arrow-left"></i></span>
+                  </div>
+                </div>
+              </a>
+              <a href="article.html" class="article-card">
+                <div class="card-image"><div class="card-image-inner bg-grad-4">
+                  <i class="fa-brands fa-html5 card-cat-icon" style="color:#FF4D3D;"></i>
+                </div></div>
+                <div class="card-content">
+                  <div class="card-meta"><span class="card-tag tag-html">HTML</span></div>
+                  <h3 class="card-title">Semantic HTML: لماذا أهم من التصميم نفسه؟</h3>
+                  <div class="card-footer">
+                    <span class="card-read"><i class="fa-regular fa-clock"></i> 4 دقائق</span>
+                    <span class="card-arrow"><i class="fa-solid fa-arrow-left"></i></span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </div>
+
+        </main>
+
+        <!-- شريط جانبي -->
+        <aside class="article-sidebar">
+          <div class="sidebar-box">
+            <div class="sidebar-box-title"><i class="fa-solid fa-list"></i> محتوى المقال</div>
+            <ul class="toc-list">
+              <li><a href="#clamp"       class="active"><i class="fa-solid fa-circle-dot"></i> clamp()</a></li>
+              <li><a href="#gap"                       ><i class="fa-solid fa-circle-dot"></i> gap</a></li>
+              <li><a href="#aspect-ratio"              ><i class="fa-solid fa-circle-dot"></i> aspect-ratio</a></li>
+              <li><a href="#logical"                   ><i class="fa-solid fa-circle-dot"></i> Logical Properties</a></li>
+              <li><a href="#custom-props"              ><i class="fa-solid fa-circle-dot"></i> CSS Variables</a></li>
+              <li><a href="#has"                       ><i class="fa-solid fa-circle-dot"></i> :has()</a></li>
+              <li><a href="#grid-auto"                 ><i class="fa-solid fa-circle-dot"></i> auto-fill minmax</a></li>
+              <li><a href="#place-items"               ><i class="fa-solid fa-circle-dot"></i> place-items</a></li>
+              <li><a href="#scroll-snap"               ><i class="fa-solid fa-circle-dot"></i> scroll-snap</a></li>
+              <li><a href="#container"                 ><i class="fa-solid fa-circle-dot"></i> Container Queries</a></li>
+              <li><a href="#summary"                   ><i class="fa-solid fa-circle-dot"></i> الخلاصة</a></li>
+            </ul>
+          </div>
+          <div class="sidebar-box">
+            <div class="sidebar-box-title"><i class="fa-solid fa-share-nodes"></i> شارك المقال</div>
+            <div class="share-btns">
+              <a href="#" class="share-btn"><i class="fa-brands fa-x-twitter"></i> Twitter / X</a>
+              <a href="#" class="share-btn"><i class="fa-brands fa-instagram"></i> Instagram</a>
+              <a href="#" class="share-btn" onclick="navigator.clipboard.writeText(location.href);return false;">
+                <i class="fa-solid fa-link"></i> نسخ الرابط
+              </a>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+
+    <!-- ══ فوتر ══ -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-bottom">
+          <p class="footer-copy">
+            <i class="fa-regular fa-copyright"></i>
+            2025 كود بالعربي · صُنع بـ <i class="fa-solid fa-heart" style="color:var(--accent-1);"></i> للمجتمع التقني العربي
+          </p>
+          <span class="footer-mono">v1.0.0</span>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script>
+    // شريط التقدم
+    window.addEventListener('scroll', () => {
+      const total = document.body.scrollHeight - window.innerHeight;
+      document.getElementById('progress-bar').style.width = (window.scrollY / total * 100) + '%';
+    }, { passive: true });
+
+    // TOC active
+    const headings = document.querySelectorAll('h2[id]');
+    const tocLinks = document.querySelectorAll('.toc-list a');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      headings.forEach(h => { if (window.scrollY >= h.offsetTop - 120) current = h.id; });
+      tocLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+    }, { passive: true });
+  </script>
+</body>
+</html>

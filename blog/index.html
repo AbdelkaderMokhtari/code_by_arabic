@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="كل مقالات كود بالعربي - شروحات برمجية عملية بالعربي" />
+  <title>المقالات | كود بالعربي</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23FF4D3D'/><text y='22' x='5' font-size='16' fill='white' font-family='monospace' font-weight='bold'>&lt;/&gt;</text></svg>" />
+  <style>
+    .blog-hero { padding:60px 0 44px; }
+    .blog-hero-title { font-size:clamp(28px,4vw,46px); font-weight:700; margin-bottom:10px; }
+
+    .filter-bar {
+      display:flex; gap:8px; flex-wrap:wrap; margin-bottom:36px;
+      padding:14px 18px; background:var(--bg-card);
+      border:1px solid var(--border); border-radius:var(--radius-lg);
+    }
+    .filter-btn {
+      display:inline-flex; align-items:center; gap:7px;
+      padding:8px 16px; border-radius:var(--radius-xl);
+      border:1px solid var(--border); background:transparent;
+      font-family:var(--font-ar); font-size:13px; font-weight:500;
+      color:var(--text-secondary); cursor:pointer; transition:all var(--transition);
+    }
+    .filter-btn i { font-size:12px; }
+    .filter-btn:hover,.filter-btn.active {
+      background:var(--text-primary); color:var(--bg-primary); border-color:var(--text-primary);
+    }
+
+    .articles-list { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; margin-bottom:50px; }
+    @media(max-width:1024px){ .articles-list{grid-template-columns:repeat(2,1fr);} }
+    @media(max-width:640px){ .articles-list{grid-template-columns:1fr;} }
+
+    .pagination { display:flex; gap:8px; justify-content:center; padding:32px 0; }
+    .page-btn {
+      width:40px; height:40px; border-radius:50%;
+      border:1px solid var(--border); background:var(--bg-card);
+      font-family:var(--font-mono); font-size:14px; cursor:pointer;
+      transition:all var(--transition); display:flex; align-items:center; justify-content:center;
+      color:var(--text-primary);
+    }
+    .page-btn.active,.page-btn:hover { background:var(--text-primary); color:var(--bg-primary); border-color:var(--text-primary); }
+  </style>
+</head>
+<body>
+  <div class="bg-noise"></div>
+  <div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div></div>
+
+  <div class="wrapper">
+
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+          <a href="../index.html" class="logo">
+            <div class="logo-mark">&lt;/&gt;</div>
+            <div class="logo-text">
+              <span class="logo-title">كود بالعربي</span>
+              <span class="logo-sub">{ tech blog }</span>
+            </div>
+          </a>
+          <nav class="site-nav">
+            <a href="../index.html"       class="nav-link">الرئيسية</a>
+            <a href="index.html"          class="nav-link active">المقالات</a>
+            <a href="../tools/index.html" class="nav-link">الأدوات</a>
+            <a href="../index.html#about" class="nav-link">عن المدونة</a>
+          </nav>
+          <div class="header-actions">
+            <button class="btn-theme" id="theme-toggle"><i class="fa-solid fa-moon"></i></button>
+            <a href="../index.html#newsletter" class="btn-subscribe">
+              <i class="fa-solid fa-envelope"></i> اشترك مجاناً
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="blog-hero">
+      <div class="container">
+        <div class="section-label reveal"><i class="fa-solid fa-newspaper"></i> المقالات</div>
+        <h1 class="blog-hero-title reveal">كل الشروحات</h1>
+        <p class="hero-desc reveal" style="margin-bottom:0;">برمجة عملية بالعربي — من المبتدئ للمحترف</p>
+      </div>
+    </section>
+
+    <div class="container">
+
+      <div class="filter-bar reveal">
+        <button class="filter-btn active" data-filter="all">
+          <i class="fa-solid fa-border-all"></i> الكل
+        </button>
+        <button class="filter-btn" data-filter="js">
+          <i class="fa-brands fa-js"></i> JavaScript
+        </button>
+        <button class="filter-btn" data-filter="css">
+          <i class="fa-brands fa-css3-alt"></i> CSS & HTML
+        </button>
+        <button class="filter-btn" data-filter="python">
+          <i class="fa-brands fa-python"></i> Python
+        </button>
+        <button class="filter-btn" data-filter="tools">
+          <i class="fa-solid fa-screwdriver-wrench"></i> أدوات
+        </button>
+        <button class="filter-btn" data-filter="git">
+          <i class="fa-brands fa-git-alt"></i> Git
+        </button>
+      </div>
+
+      <div class="articles-list">
+
+        <a href="article.html" class="article-card reveal" data-cat="js">
+          <div class="card-image"><div class="card-image-inner bg-grad-1">
+            <i class="fa-brands fa-js card-cat-icon" style="color:#FFB800;"></i>
+          </div></div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="card-tag tag-js">JavaScript</span>
+              <span class="card-date"><i class="fa-regular fa-calendar"></i> 2 يناير 2025</span>
+            </div>
+            <h3 class="card-title">كيف تفهم Async/Await بأسلوب بسيط جداً</h3>
+            <p class="card-desc">شرح مبسط مع أمثلة عملية تخليك تستوعب الموضوع في 10 دقائق.</p>
+            <div class="card-footer">
+              <span class="card-read"><i class="fa-regular fa-clock"></i> 8 دقائق</span>
+              <span class="card-arrow"><i class="fa-solid fa-arrow-left"></i></span>
+            </div>
+          </div>
+        </a>
+
+        <a href="article1.html" class="article-card reveal" data-cat="css">
+          <div class="card-image"><div class="card-image-inner bg-grad-2">
+            <i class="fa-brands fa-css3-alt card-cat-icon" style="color:#6B4FBB;"></i>
+          </div></div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="card-tag tag-css">CSS</span>
+              <span class="card-date"><i class="fa-regular fa-calendar"></i> 5 يناير 2025</span>
+            </div>
+            <h3 class="card-title">10 خصائص CSS ستغير طريقة برمجتك للأبد</h3>
+            <p class="card-desc">خصائص مخفية يستخدمها المحترفون يومياً وما تجد عنها مقالات عربية.</p>
+            <div class="card-footer">
+              <span class="card-read"><i class="fa-regular fa-clock"></i> 5 دقائق</span>
+              <span class="card-arrow"><i class="fa-solid fa-arrow-left"></i></span>
+            </div>
+          </div>
+        </a>
+
+        <a href="article.html" class="article-card reveal" data-cat="python">
+          <div class="card-image"><div class="card-image-inner bg-grad-3">
+            <i class="fa-brands fa-python card-cat-icon" style="color:#00C896;"></i>
+          </div></div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="card-tag tag-python">Python</span>
+              <span class="card-date"><i class="fa-regular fa-calendar"></i> 8 يناير 2025</span>
+            </div>
+            <h3 class="card-title">أتمتة المهام اليومية بـ Python في 30 سطر</h3>
+            <p class="card-desc">بدل ما تضيّع ساعتين في مهام متكررة، خلّي Python تعملها تلقائياً.</p>
+            <div class="card-footer">
+              <span class="card-read"><i class="fa-regular fa-clock"></i> 6 دقائق</span>
+              <span class="card-arrow"><i class="fa-solid fa-arrow-left"></i></span>
+            </div>
+          </div>
+        </a>
+
+        <a href="article.html" class="article-card reveal" data-cat="css">
+          <div class="card-image"><div class="card-image-inner bg-grad-4">
+            <i class="fa-brands fa-html5 card-cat-icon" style="color:#FF4D3D;"></i>
+          </div></div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="card-tag tag-html">HTML</span>
+              <span class="card-date"><i class="fa-regular fa-calendar"></i> 10 يناير 2025</span>
+            </div>
+            <h3 class="card-title">Semantic HTML: أهم من التصميم نفسه</h3>
+            <p class="card-desc">SEO وقراءة الكود تتحسن لما تكتب HTML صح من البداية.</p>
+            <div class="card-footer">
+              <span class="card-read"><i class="fa-regular fa-clock"></i> 4 دقائق</span>
+              <span class="card-arrow"><i class="fa-solid fa-arrow-left"></i></span>
+            </div>
+          </div>
+        </a>
+
+        <a href="article.html" class="article-card reveal" data-cat="js">
+          <div class="card-image"><div class="card-image-inner bg-grad-1">
+            <i class="fa-brands fa-js card-cat-icon" style="color:#FFB800;"></i>
+          </div></div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="card-tag tag-js">JavaScript</span>
+              <span class="card-date"><i class="fa-regular fa-calendar"></i> 12 يناير 2025</span>
+            </div>
+            <h3 class="card-title">Local Storage vs Cookies: متى تستخدم أيهما؟</h3>
+            <p class="card-desc">فرق عملي وواضح يساعدك تختار الأداة الصح في مشروعك.</p>
+            <div class="card-footer">
+              <span class="card-read"><i class="fa-regular fa-clock"></i> 5 دقائق</span>
+              <span class="card-arrow"><i class="fa-solid fa-arrow-left"></i></span>
+            </div>
+          </div>
+        </a>
+
+        <a href="article.html" class="article-card reveal" data-cat="tools">
+          <div class="card-image"><div class="card-image-inner bg-grad-2">
+            <i class="fa-solid fa-screwdriver-wrench card-cat-icon" style="color:#6B4FBB;"></i>
+          </div></div>
+          <div class="card-content">
+            <div class="card-meta">
+              <span class="card-tag tag-tools">أدوات</span>
+              <span class="card-date"><i class="fa-regular fa-calendar"></i> 14 يناير 2025</span>
+            </div>
+            <h3 class="card-title">أفضل 7 إضافات VS Code للمطور العربي</h3>
+            <p class="card-desc">إضافات توفر عليك ساعات يومياً، مع شرح لإعداد كل واحدة.</p>
+            <div class="card-footer">
+              <span class="card-read"><i class="fa-regular fa-clock"></i> 7 دقائق</span>
+              <span class="card-arrow"><i class="fa-solid fa-arrow-left"></i></span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+
+      <div class="pagination reveal">
+        <button class="page-btn active">1</button>
+        <button class="page-btn">2</button>
+        <button class="page-btn">3</button>
+        <button class="page-btn"><i class="fa-solid fa-arrow-left"></i></button>
+      </div>
+    </div>
+
+    <footer class="site-footer">
+      <div class="container">
+        <div class="footer-bottom">
+          <p class="footer-copy">
+            <i class="fa-regular fa-copyright"></i>
+            2025 كود بالعربي · صُنع بـ <i class="fa-solid fa-heart" style="color:var(--accent-1);"></i> للمجتمع التقني العربي
+          </p>
+          <span class="footer-mono">v1.0.0</span>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script>
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        document.querySelectorAll('.article-card').forEach(card => {
+          const show = filter === 'all' || card.dataset.cat === filter;
+          card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+          if (show) {
+            card.style.display = '';
+            requestAnimationFrame(() => { card.style.opacity = '1'; card.style.transform = ''; });
+          } else {
+            card.style.opacity = '0';
+            setTimeout(() => { card.style.display = 'none'; }, 300);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="مدونة تقنية عربية تشرح البرمجة بأسلوب بسيط وعملي، مع أدوات مجانية للمطورين" />
+  <title>كود بالعربي | مدونة برمجة تقنية</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23FF4D3D'/><text y='22' x='5' font-size='16' fill='white' font-family='monospace' font-weight='bold'>&lt;/&gt;</text></svg>" />
+</head>
+<body>
+
+  <div class="bg-noise"></div>
+  <div class="bg-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <div class="wrapper">
+
+    <!-- ══ هيدر ══ -->
+    <header class="site-header">
+      <div class="container">
+        <div class="header-inner">
+
+          <a href="index.html" class="logo">
+            <div class="logo-mark">&lt;/&gt;</div>
+            <div class="logo-text">
+              <span class="logo-title">كود بالعربي</span>
+              <span class="logo-sub">{ tech blog }</span>
+            </div>
+          </a>
+
+          <nav class="site-nav">
+            <a href="index.html"       class="nav-link active">الرئيسية</a>
+            <a href="blog/index.html"  class="nav-link">المقالات</a>
+            <a href="tools/index.html" class="nav-link">الأدوات</a>
+            <a href="#about"           class="nav-link">عن المدونة</a>
+          </nav>
+
+          <div class="header-actions">
+            <button class="btn-theme" id="theme-toggle" title="تغيير المظهر">
+              <i class="fa-solid fa-moon"></i>
+            </button>
+            <a href="#newsletter" class="btn-subscribe">
+              <i class="fa-solid fa-envelope"></i> اشترك مجاناً
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </header>
+
+    <!-- ══ هيرو ══ -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-inner">
+
+          <div class="hero-content">
+            <div class="hero-badge">
+              <span class="dot"></span>
+              مدونة تقنية عربية &nbsp;·&nbsp; محتوى مجاني 100%
+            </div>
+
+            <h1 class="hero-title">
+              تعلم
+              <span class="code-word" id="typewriter">JavaScript</span>
+              <br />
+              <span class="highlight">بالعربي</span>
+              خطوة بخطوة
+            </h1>
+
+            <p class="hero-desc">
+              مقالات برمجية عملية، شروحات واضحة، وأدوات مجانية تساعدك تبني مشاريع حقيقية.
+              بدون تعقيد، مباشرة للنقطة.
+            </p>
+
+            <div class="hero-actions">
+              <a href="blog/index.html" class="btn-primary">
+                <i class="fa-solid fa-book-open"></i> ابدأ القراءة
+              </a>
+              <a href="tools/index.html" class="btn-secondary">
+                <i class="fa-solid fa-screwdriver-wrench"></i> الأدوات المجانية
+              </a>
+            </div>
+
+            <div class="hero-stats">
+              <div class="stat-item">
+                <div class="stat-num"><span data-count="10" data-suffix="+">0+</span></div>
+                <div class="stat-label">مقال تقني</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num"><span data-count="4" data-suffix=" أدوات">0</span></div>
+                <div class="stat-label">مجانية كاملة</div>
+              </div>
+              <div class="stat-item">
+                <div class="stat-num"><span data-count="0" data-suffix="$">0$</span></div>
+                <div class="stat-label">تكلفة التعلم</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- بطاقة الكود -->
+          <div class="hero-card">
+            <div class="card-header">
+              <div class="card-dots"><span></span><span></span><span></span></div>
+              <span class="card-filename">مرحباً.js</span>
+            </div>
+            <div class="card-body">
+              <div class="code-line"><span class="c-comment">// أهلاً بك في كود بالعربي 👋</span></div>
+              <div class="code-line">&nbsp;</div>
+              <div class="code-line"><span class="c-keyword">const</span><span class="c-var"> مدوّنة</span><span class="c-op"> = {</span></div>
+              <div class="code-line">&nbsp;&nbsp;<span class="c-var">اللغة</span><span class="c-op">: </span><span class="c-string">'العربية'</span><span class="c-op">,</span></div>
+              <div class="code-line">&nbsp;&nbsp;<span class="c-var">المحتوى</span><span class="c-op">: </span><span class="c-string">'برمجة + أدوات'</span><span class="c-op">,</span></div>
+              <div class="code-line">&nbsp;&nbsp;<span class="c-var">السعر</span><span class="c-op">: </span><span class="c-num">0</span><span class="c-comment"> // مجاني!</span></div>
+              <div class="code-line"><span class="c-op">};</span></div>
+              <div class="code-line">&nbsp;</div>
+              <div class="code-line"><span class="c-func">console</span><span class="c-op">.</span><span class="c-func">log</span><span class="c-op">(</span><span class="c-string">'ابدأ التعلم الآن!'</span><span class="c-op">);</span></div>
+              <div class="code-line">&nbsp;</div>
+              <div class="code-line"><span class="c-comment">// &gt; ابدأ التعلم الآن! ✓</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ مقالات ══ -->
+    <section class="section">
+      <div class="container">
+        <div class="section-header reveal">
+          <div>
+            <div class="section-label">المقالات</div>
+            <h2 class="section-title">أحدث الشروحات</h2>
+          </div>
+          <a href="blog/index.html" class="section-link">كل المقالات <i class="fa-solid fa-arrow-left"></i></a>
+        </div>
+
+        <div class="articles-grid">
+
+          <a href="blog/article.html" class="article-card featured reveal">
+            <div class="card-image">
+              <div class="card-image-inner bg-grad-1">
+                <i class="fa-brands fa-js card-cat-icon" style="color:#FFB800;"></i>
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="card-meta">
+                <span class="card-tag tag-js">JavaScript</span>
+                <span class="card-date"><i class="fa-regular fa-calendar"></i> 2 يناير 2025</span>
+              </div>
+              <h3 class="card-title">كيف تفهم Async/Await في JavaScript بأسلوب بسيط جداً</h3>
+              <p class="card-desc">واحدة من أصعب المواضيع على المبتدئين، شرح مبسط مع أمثلة عملية من الواقع تخليك تستوعب الموضوع في 10 دقائق.</p>
+              <div class="card-footer">
+                <span class="card-read"><i class="fa-regular fa-clock"></i> 8 دقائق قراءة</span>
+                <span class="card-arrow"><i class="fa-solid fa-arrow-left"></i></span>
+              </div>
+            </div>
+          </a>
+
+          <a href="blog/article1.html" class="article-card reveal">
+            <div class="card-image">
+              <div class="card-image-inner bg-grad-2">
+                <i class="fa-brands fa-css3-alt card-cat-icon" style="color:#6B4FBB;"></i>
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="card-meta">
+                <span class="card-tag tag-css">CSS</span>
+                <span class="card-date"><i class="fa-regular fa-calendar"></i> 5 يناير 2025</span>
+              </div>
+              <h3 class="card-title">10 خصائص CSS ما تعرفها وستغير طريقة برمجتك</h3>
+              <p class="card-desc">خصائص مخفية يستخدمها المحترفون يومياً لكن ما تجد عنها مقالات عربية.</p>
+              <div class="card-footer">
+                <span class="card-read"><i class="fa-regular fa-clock"></i> 5 دقائق</span>
+                <span class="card-arrow"><i class="fa-solid fa-arrow-left"></i></span>
+              </div>
+            </div>
+          </a>
+
+          <a href="blog/article.html" class="article-card reveal">
+            <div class="card-image">
+              <div class="card-image-inner bg-grad-3">
+                <i class="fa-brands fa-python card-cat-icon" style="color:#00C896;"></i>
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="card-meta">
+                <span class="card-tag tag-python">Python</span>
+                <span class="card-date"><i class="fa-regular fa-calendar"></i> 8 يناير 2025</span>
+              </div>
+              <h3 class="card-title">أتمتة المهام اليومية بـ Python في 30 سطر كود</h3>
+              <p class="card-desc">بدل ما تضيّع ساعتين يومياً في مهام متكررة، خلّي Python تعملها عنك تلقائياً.</p>
+              <div class="card-footer">
+                <span class="card-read"><i class="fa-regular fa-clock"></i> 6 دقائق</span>
+                <span class="card-arrow"><i class="fa-solid fa-arrow-left"></i></span>
+              </div>
+            </div>
+          </a>
+
+          <a href="blog/article.html" class="article-card reveal">
+            <div class="card-image">
+              <div class="card-image-inner bg-grad-4">
+                <i class="fa-brands fa-html5 card-cat-icon" style="color:#FF4D3D;"></i>
+              </div>
+            </div>
+            <div class="card-content">
+              <div class="card-meta">
+                <span class="card-tag tag-html">HTML</span>
+                <span class="card-date"><i class="fa-regular fa-calendar"></i> 10 يناير 2025</span>
+              </div>
+              <h3 class="card-title">Semantic HTML: لماذا أهم من التصميم نفسه؟</h3>
+              <p class="card-desc">SEO والـ Accessibility تتحسن لما تكتب HTML صح من البداية.</p>
+              <div class="card-footer">
+                <span class="card-read"><i class="fa-regular fa-clock"></i> 4 دقائق</span>
+                <span class="card-arrow"><i class="fa-solid fa-arrow-left"></i></span>
+              </div>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ أدوات ══ -->
+    <section class="section" style="padding-top:0;">
+      <div class="container">
+        <div class="section-header reveal">
+          <div>
+            <div class="section-label">الأدوات</div>
+            <h2 class="section-title">أدوات مجانية للمطورين</h2>
+          </div>
+          <a href="tools/index.html" class="section-link">كل الأدوات <i class="fa-solid fa-arrow-left"></i></a>
+        </div>
+
+        <div class="tools-grid">
+          <a href="tools/index.html" class="tool-card reveal">
+            <i class="fa-solid fa-palette tool-icon"></i>
+            <div class="tool-name">مولّد باليتات</div>
+            <p class="tool-desc">ولّد باليت ألوان متناسق لمشروعك بضغطة زر، مع كود CSS جاهز.</p>
+            <span class="tool-badge"><i class="fa-solid fa-check"></i> مجاني</span>
+          </a>
+          <a href="tools/index.html" class="tool-card reveal">
+            <i class="fa-solid fa-ruler-combined tool-icon"></i>
+            <div class="tool-name">محول CSS Units</div>
+            <p class="tool-desc">حوّل بين px و rem و em و vh بسهولة مع معاينة فورية.</p>
+            <span class="tool-badge"><i class="fa-solid fa-check"></i> مجاني</span>
+          </a>
+          <a href="tools/index.html" class="tool-card reveal">
+            <i class="fa-solid fa-code tool-icon"></i>
+            <div class="tool-name">منسّق JSON</div>
+            <p class="tool-desc">الصق الـ JSON المشوّه واحصل على نسخة منسّقة وجميلة فوراً.</p>
+            <span class="tool-badge"><i class="fa-solid fa-check"></i> مجاني</span>
+          </a>
+          <a href="tools/index.html" class="tool-card reveal">
+            <i class="fa-solid fa-lock tool-icon"></i>
+            <div class="tool-name">Base64 Encoder</div>
+            <p class="tool-desc">حوّل أي نص لـ Base64 والعكس، بدون أي سيرفر.</p>
+            <span class="tool-badge"><i class="fa-solid fa-check"></i> مجاني</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ نشرة ══ -->
+    <section class="newsletter" id="newsletter">
+      <div class="container">
+        <div class="newsletter-inner reveal">
+          <div>
+            <div class="section-label">النشرة البريدية</div>
+            <h2 class="newsletter-title">لا تفوّتك مقالة واحدة</h2>
+            <p class="newsletter-desc">كل أسبوع، مقال تقني عملي يصلك مباشرة على بريدك. بدون سبام، فقط محتوى يفيدك.</p>
+          </div>
+          <div>
+            <form class="newsletter-form" action="https://formspree.io/f/xlgaengp" method="POST">
+              <div class="input-group">
+                <input type="email" name="email" placeholder="بريدك الإلكتروني" required />
+                <button type="submit">
+                  <i class="fa-solid fa-paper-plane"></i> اشتراك
+                </button>
+              </div>
+              <p class="nl-message"></p>
+              <p class="newsletter-note">
+                <i class="fa-solid fa-shield-halved"></i>
+                بريدك آمن ومحمي، يمكنك الإلغاء في أي وقت
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ فوتر ══ -->
+    <footer class="site-footer" id="about">
+      <div class="container">
+        <div class="footer-grid">
+
+          <div class="footer-about">
+            <a href="index.html" class="logo">
+              <div class="logo-mark">&lt;/&gt;</div>
+              <div class="logo-text">
+                <span class="logo-title">كود بالعربي</span>
+                <span class="logo-sub">{ tech blog }</span>
+              </div>
+            </a>
+            <p>مدونة تقنية عربية تهدف لتبسيط البرمجة وجعلها في متناول كل من يريد التعلم، بمحتوى عملي ومباشر بدون حشو.</p>
+            <div class="social-links">
+              <a href="#" class="social-btn" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+              <a href="#" class="social-btn" title="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+              <a href="#" class="social-btn" title="Twitter/X"><i class="fa-brands fa-x-twitter"></i></a>
+              <a href="#" class="social-btn" title="GitHub"><i class="fa-brands fa-github"></i></a>
+              <a href="#" class="social-btn" title="YouTube"><i class="fa-brands fa-youtube"></i></a>
+            </div>
+          </div>
+
+          <div class="footer-col">
+            <h4>المحتوى</h4>
+            <ul class="footer-links">
+              <li><a href="blog/index.html"><i class="fa-solid fa-newspaper"></i> كل المقالات</a></li>
+              <li><a href="blog/index.html"><i class="fa-brands fa-js"></i> JavaScript</a></li>
+              <li><a href="blog/index.html"><i class="fa-brands fa-css3-alt"></i> CSS & HTML</a></li>
+              <li><a href="blog/index.html"><i class="fa-brands fa-python"></i> Python</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>الأدوات</h4>
+            <ul class="footer-links">
+              <li><a href="tools/index.html"><i class="fa-solid fa-palette"></i> مولّد الألوان</a></li>
+              <li><a href="tools/index.html"><i class="fa-solid fa-ruler-combined"></i> محول CSS</a></li>
+              <li><a href="tools/index.html"><i class="fa-solid fa-code"></i> JSON Formatter</a></li>
+              <li><a href="tools/index.html"><i class="fa-solid fa-lock"></i> Base64 Tool</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>أخرى</h4>
+            <ul class="footer-links">
+              <li><a href="#about"><i class="fa-solid fa-circle-info"></i> عن المدونة</a></li>
+              <li><a href="#newsletter"><i class="fa-solid fa-envelope"></i> النشرة البريدية</a></li>
+              <li><a href="mailto:hi@kodbalArabi.com"><i class="fa-solid fa-paper-plane"></i> تواصل معي</a></li>
+              <li><a href="#"><i class="fa-solid fa-shield-halved"></i> سياسة الخصوصية</a></li>
+            </ul>
+          </div>
+
+        </div>
+
+        <div class="footer-bottom">
+          <p class="footer-copy">
+            <i class="fa-regular fa-copyright"></i>
+            2025 كود بالعربي · صُنع بـ <i class="fa-solid fa-heart" style="color:var(--accent-1);"></i> للمجتمع التقني العربي
+          </p>
+          <span class="footer-mono">v1.0.0 · vanilla JS</span>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
